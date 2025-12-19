@@ -47,6 +47,7 @@ namespace Clock
 			cbShowWeekday.Visible=false;
 			btnHideControls.Visible=false;
 			this.ShowInTaskbar = false;
+
 		}
 	}
 }
