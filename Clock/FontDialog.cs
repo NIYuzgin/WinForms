@@ -22,6 +22,7 @@ namespace Clock
 			lastChosenIndex = 0;
 			LoadFonts("*.ttf");
 			LoadFonts("*.otf");
+			comboBoxFont.SelectedIndex = 1;
 		}
 
 		private void buttonCancel_Click(object sender, EventArgs e)
@@ -32,7 +33,7 @@ namespace Clock
 
 		private void FontDialog_Load(object sender, EventArgs e)
 		{
-			
+			numericUpDownFontSize.Value=(decimal)Font.Size;
 		}
 		void LoadFonts(string extension)
 		{
@@ -61,28 +62,30 @@ namespace Clock
 
 		private void comboBoxFont_SelectedIndexChanged(object sender, EventArgs e)
 		{
-
 			string info = $"Selected:\nIndex:\t{comboBoxFont.SelectedIndex.ToString()}";
 			info += $"\nItem:\t{comboBoxFont.SelectedItem}";
 			info += $"\nText:\t{comboBoxFont.SelectedText}";
 			info += $"\nValue:\t{comboBoxFont.SelectedValue}";
 			//MessageBox.Show(this,info, "SelectedIndexChanged", MessageBoxButtons.OK, MessageBoxIcon.Information);
-			SetFont(comboBoxFont.SelectedItem.ToString());
+			SetFont();
 		}
-		void SetFont(string filename)
+		void SetFont()
 		{
 			PrivateFontCollection pfc = new PrivateFontCollection();
-			pfc.AddFontFile(filename);
-			labelExample.Font = new Font(pfc.Families[0], 32);
-
+			pfc.AddFontFile(comboBoxFont.SelectedItem.ToString());
+			labelExample.Font = new Font(pfc.Families[0], (float)numericUpDownFontSize.Value);
 		}
 
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
 			this.Font=labelExample.Font;
 			this.lastChosenIndex = comboBoxFont.SelectedIndex;
+		}
 
-
+		private void numericUpDownFontSize_ValueChanged(object sender, EventArgs e)
+		{
+			//SetFont(comboBoxFont.SelectedItem.ToString());
+			SetFont();
 		}
 	}
 }
