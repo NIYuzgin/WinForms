@@ -16,5 +16,10 @@ namespace Clock
 		{
 			InitializeComponent();
 		}
+
+		private void clbWeekDays_SelectedIndexChanged(object sender, EventArgs e)
+		{
+
+		}
 	}
 }
