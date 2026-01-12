@@ -18,8 +18,8 @@ namespace Clock
 			InitializeComponent();
 			dtpDate.Enabled = false;
 			fileDialog = new OpenFileDialog();
-			fileDialog.Filter = 
-				"All sound files (*.mp3;*.flac;*.flacc)|*.mp3;*.flac;*.flacc|mp3 files(*.mp3)|*mp3|Flac files (*.flac;*.flacc";
+			fileDialog.Filter =
+				"All sound files (*.mp3;*.flac;*.flacc)|*.mp3;*.flac;*.flacc|mp3 files (*.mp3)|*.mp3|Flac files (*.flac)|*.flac;*.flacc";
 		}
 
 		private void clbWeekDays_SelectedIndexChanged(object sender, EventArgs e)
