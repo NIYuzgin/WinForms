@@ -13,6 +13,8 @@ namespace Clock
 	public partial class AlarmDialog : Form
 	{
 		OpenFileDialog fileDialog;
+
+		public Alarm Alarm { get; private set; }
 		public AlarmDialog()
 		{
 			InitializeComponent();
@@ -20,6 +22,8 @@ namespace Clock
 			fileDialog = new OpenFileDialog();
 			fileDialog.Filter =
 				"All sound files (*.mp3;*.flac;*.flacc)|*.mp3;*.flac;*.flacc|mp3 files (*.mp3)|*.mp3|Flac files (*.flac)|*.flac;*.flacc";
+		Alarm = new Alarm();
+		
 		}
 
 		private void clbWeekDays_SelectedIndexChanged(object sender, EventArgs e)
@@ -83,6 +87,14 @@ namespace Clock
 
 
 
+		}
+
+		private void buttonOK_Click(object sender, EventArgs e)
+		{
+			Alarm.Date= checkBoxUseDate.Checked ? dtpDate.Value : DateTime.MaxValue;
+			Alarm.Time = dtpTime.Value;
+			Alarm.Days = new Week(GetDaysMask());
+			Alarm.Filename = labelFilename.Text;
 		}
 	}
 }
