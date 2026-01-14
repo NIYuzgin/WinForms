@@ -24,6 +24,41 @@ namespace Clock
 
 		private void clbWeekDays_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			for (int i = 0; i < clbWeekDays.CheckedItems.Count; i++)
+			{
+				Console.Write($"{clbWeekDays.CheckedItems[i]}\t");
+				Console.WriteLine();
+				byte days = 0;
+
+				for (int i = 0;i<clbWeekDays.CheckedIndices.Count;i++)
+				{
+					days|=(byte)(1<<clbWeekDays.CheckedIndices[i]);
+					Console.Write($"{clbWeekDays.CheckedIndices[i]}\t");
+
+
+				}
+					
+				Console.WriteLine($"Days mask:{days}");
+				Console.WriteLine("\n------------------------------------\n");
+			}
+
+			byte GetDaysMask()
+			{
+
+				byte days = 0;
+
+				for (int i = 0; i < clbWeekDays.CheckedIndices.Count; i++)
+				{
+					days |= (byte)(1 << clbWeekDays.CheckedIndices[i]);
+					Console.Write($"{clbWeekDays.CheckedIndices[i]}\t");
+
+
+				}
+
+
+				return days;
+			}
+
 
 		}
 
@@ -35,15 +70,18 @@ namespace Clock
 
 		private void buttonAdd_Click(object sender, EventArgs e)
 		{
-			if (fileDialog.ShowDialog() == DialogResult.OK) 
+			if (fileDialog.ShowDialog() == DialogResult.OK)
 			{
 				labelFilename.Text = fileDialog.FileName;
-			
+
 			}
 		}
 
 		private void clbWeekDays_ItemCheck(object sender, ItemCheckEventArgs e)
 		{
+
+
+
 
 		}
 	}
