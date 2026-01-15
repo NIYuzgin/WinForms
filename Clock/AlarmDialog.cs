@@ -52,11 +52,6 @@ namespace Clock
 			return days;
 		}
 
-		/*
-				
-		 
-		 */
-
 		private void checkBoxUseDate_CheckedChanged(object sender, EventArgs e)
 		{
 			dtpDate.Enabled = (sender as CheckBox).Checked;
