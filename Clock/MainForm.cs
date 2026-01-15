@@ -236,20 +236,19 @@ namespace Clock
 
 		private void tsmiAlarms_Click(object sender, EventArgs e)
 		{
-
 			alarms.ShowDialog();
-
 		}
 
 		private void tsmiShowConsole_CheckedChanged(object sender, EventArgs e)
 		{
-
 			if ((sender as ToolStripMenuItem).Checked) AllocConsole();
+			else FreeConsole();
 		}
 
 		[DllImport("kernel32.dll")]
 		public static extern void AllocConsole();
-
-
+		[DllImport("kernel32.dll")]
+		public static extern void FreeConsole();
+		
 	}
 }
