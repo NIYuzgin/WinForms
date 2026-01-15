@@ -23,7 +23,7 @@ namespace Clock
 		{
 			if (alarm.ShowDialog() == DialogResult.OK)
 			{
-				listBoxAlarms.Items.Add(alarm);
+				listBoxAlarms.Items.Add(alarm.Alarm);
 			}
 
 		}

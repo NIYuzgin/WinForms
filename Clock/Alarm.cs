@@ -8,12 +8,11 @@ namespace Clock
 {
 	public class Alarm
 	{
-
 		public DateTime Date { get;set; }
 		public DateTime Time { get;set; }
 		public Week Days { get;set; }
 		public string Filename { get;set; }
-
+		
 		public override string ToString()
 		{
 			//return $"{Date}, {Time}, {Days.ToString()}, {Filename} ";
@@ -23,9 +22,7 @@ namespace Clock
 			info += $"\t{Days}";
 			info += $"\t{Filename.Split('\\').Last()}";
 			return info;
-
 		}
-
-
+		
 	}
 }

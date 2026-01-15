@@ -24,7 +24,7 @@ namespace Clock
 				if ((this.days & day) != 0) days += $"{NAMES[i]},";
 
 			}
-			return base.ToString();
+			return days;
 			
 			/*
 			 ------------------------------------------------------
