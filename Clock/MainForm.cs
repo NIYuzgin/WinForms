@@ -19,6 +19,7 @@ namespace Clock
 		ColorDialog foregroundColorDialog;
 		ColorDialog backgroundColorDialog;
 		AlarmForms alarms;
+		Alarm alarm;
 
 		public MainForm()
 		{
@@ -37,17 +38,19 @@ namespace Clock
 			backgroundColorDialog = new ColorDialog();
 			alarms = new AlarmForms();
 
+			alarm = null;
+
 			LoadSettings();
-			
 		}
+
 		void SetVisibility(bool visible)
 		{
 			cbShowDate.Visible = visible;
 			cbShowWeekday.Visible = visible;
 			btnHideControls.Visible = visible;
 			this.ShowInTaskbar = visible;
-			this.FormBorderStyle = visible ? FormBorderStyle.FixedSingle: FormBorderStyle.None;
-			this.TransparencyKey = visible? Color.Empty:this.BackColor;
+			this.FormBorderStyle = visible ? FormBorderStyle.FixedSingle : FormBorderStyle.None;
+			this.TransparencyKey = visible ? Color.Empty : this.BackColor;
 		}
 
 		void SaveSettings()
@@ -66,14 +69,14 @@ namespace Clock
 			writer.WriteLine(tsmiTopmost.Checked);
 			writer.WriteLine(tsmiShowControls.Checked);
 			writer.WriteLine(tsmiShowConsole.Checked);
-			
+
 			writer.WriteLine(tsmiShowDate.Checked);
 			writer.WriteLine(tsmiShowWeekday.Checked);
 			writer.WriteLine(tsmiAutoStart.Checked);
-			
+
 			writer.WriteLine(labelTime.BackColor.ToArgb());
 			writer.WriteLine(labelTime.ForeColor.ToArgb());
-			
+
 			writer.WriteLine(fontDialog.Filename);
 			writer.WriteLine(labelTime.Font.Size);
 
@@ -96,7 +99,6 @@ namespace Clock
 					Convert.ToInt32(reader.ReadLine())
 					);
 
-
 				this.TopMost = tsmiTopmost.Checked = bool.Parse(reader.ReadLine());
 				tsmiShowControls.Checked = bool.Parse(reader.ReadLine());
 				tsmiShowConsole.Checked = bool.Parse(reader.ReadLine());
@@ -116,9 +118,8 @@ namespace Clock
 			catch (Exception ex)
 			{
 				MessageBox.Show(this, ex.Message, "Settings issue", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-				
-			}
 
+			}
 		}
 
 		private void timer_Tick(object sender, EventArgs e)
@@ -137,8 +138,23 @@ namespace Clock
 				labelTime.Text += $"\n{DateTime.Now.ToString("yyyy.MM.dd")}";
 			if (cbShowWeekday.Checked)
 				labelTime.Text += $"\n{DateTime.Now.DayOfWeek}";
+			if (
+				alarm != null
+					&& alarm.Time.Hours == DateTime.Now.Hour
+					&& alarm.Time.Minutes == DateTime.Now.Minute
+					&& alarm.Time.Seconds == DateTime.Now.Second
+			/*	*/
+				)
+				MessageBox.Show(alarm.ToString());
+				if (DateTime.Now.Second % 5 == 0) alarm = FindNextAlarm();
 
-			notifyIcon.Text=labelTime.Text;
+			notifyIcon.Text = labelTime.Text;
+		}
+
+		Alarm FindNextAlarm()
+		{
+			Alarm[] actualAlarms = alarms.List.Items.Cast<Alarm>().Where(a => a.Time > DateTime.Now.TimeOfDay).ToArray();
+			return actualAlarms.Min();
 		}
 
 		private void btnHideControls_Click(object sender, EventArgs e)
@@ -156,13 +172,13 @@ namespace Clock
 			if (!TopMost)
 			{
 				this.TopMost = true;
-				this.TopMost = false; 
+				this.TopMost = false;
 			}
 		}
 
 		private void tsmiTopmost_Click(object sender, EventArgs e)
 		{
-			this.TopMost=tsmiTopmost.Checked;
+			this.TopMost = tsmiTopmost.Checked;
 		}
 
 		private void tsmiShowControls_CheckedChanged(object sender, EventArgs e)
@@ -177,14 +193,14 @@ namespace Clock
 		private void tsmiShowDate_CheckedChanged(object sender, EventArgs e) =>
 			cbShowDate.Checked = tsmiShowDate.Checked;
 
-		private void cbShowDate_CheckedChanged(object sender, EventArgs e)=>
-		tsmiShowDate.Checked=cbShowDate.Checked;
+		private void cbShowDate_CheckedChanged(object sender, EventArgs e) =>
+		tsmiShowDate.Checked = cbShowDate.Checked;
 
-		private void tsmiShowWeekday_CheckedChanged(object sender, EventArgs e)=>
+		private void tsmiShowWeekday_CheckedChanged(object sender, EventArgs e) =>
 			cbShowWeekday.Checked = tsmiShowWeekday.Checked;
 
-		private void cbShowWeekday_CheckedChanged(object sender, EventArgs e)=>
-			tsmiShowWeekday.Checked=cbShowWeekday.Checked;
+		private void cbShowWeekday_CheckedChanged(object sender, EventArgs e) =>
+			tsmiShowWeekday.Checked = cbShowWeekday.Checked;
 
 		private void tsmiQuit_Click(object sender, EventArgs e) =>
 			this.Close();
@@ -192,8 +208,8 @@ namespace Clock
 		private void tsmiForegroundColor_Click(object sender, EventArgs e)
 		{
 			DialogResult result = foregroundColorDialog.ShowDialog();
-			if (result == DialogResult.OK) 
-			labelTime.ForeColor = foregroundColorDialog.Color;
+			if (result == DialogResult.OK)
+				labelTime.ForeColor = foregroundColorDialog.Color;
 
 		}
 
@@ -201,7 +217,7 @@ namespace Clock
 		{
 			DialogResult result = backgroundColorDialog.ShowDialog();
 			if (result == DialogResult.OK)
-				labelTime.BackColor=backgroundColorDialog.Color;
+				labelTime.BackColor = backgroundColorDialog.Color;
 
 		}
 
@@ -209,21 +225,21 @@ namespace Clock
 		{
 			fontDialog.Location = new Point
 				(
-				this.Location.X - fontDialog.Width-10,
+				this.Location.X - fontDialog.Width - 10,
 				this.Location.Y
 
 				);
 			fontDialog.Font = labelTime.Font;
 			DialogResult result = fontDialog.ShowDialog();
-			if(result == DialogResult.OK)
+			if (result == DialogResult.OK)
 				labelTime.Font = fontDialog.Font;
 		}
 
 		private void tsmiAutoStart_CheckedChanged(object sender, EventArgs e)
 		{
 			string key_name = "ClockPV 521";
-			RegistryKey rk =Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-			if(tsmiAutoStart.Checked)rk.SetValue(key_name,Application.ExecutablePath);
+			RegistryKey rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+			if (tsmiAutoStart.Checked) rk.SetValue(key_name, Application.ExecutablePath);
 			else rk.DeleteValue(key_name, false); // false - не бросать исключение, если
 			rk.Dispose();
 
@@ -249,6 +265,6 @@ namespace Clock
 		public static extern void AllocConsole();
 		[DllImport("kernel32.dll")]
 		public static extern void FreeConsole();
-		
+
 	}
 }

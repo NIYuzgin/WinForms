@@ -12,7 +12,9 @@ namespace Clock
 {
 	public partial class AlarmForms : Form
 	{
-		AlarmDialog alarm;
+		//AlarmDialog alarm;
+
+		public ListBox List { get => listBoxAlarms;  }
 		public AlarmForms()
 		{
 			InitializeComponent();
@@ -34,7 +36,7 @@ namespace Clock
 
 		private void listBoxAlarms_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
-			if (listBoxAlarms.Items.Count > 0 && listBoxAlarms.SelectedItem!=null)
+			if (listBoxAlarms.Items.Count > 0 && listBoxAlarms.SelectedItem != null)
 			{
 				AlarmDialog alarm = new AlarmDialog(listBoxAlarms.SelectedItem as Alarm);
 				alarm.ShowDialog();
