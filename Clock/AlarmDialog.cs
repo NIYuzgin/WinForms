@@ -25,6 +25,26 @@ namespace Clock
 			Alarm = new Alarm();
 		}
 
+		public AlarmDialog(Alarm alarm) : this()
+		{
+			Alarm = alarm;
+			Extract();
+
+		}
+
+		void Extract()
+		{
+			if (Alarm.Date != DateTime.MaxValue)
+			{
+				dtpDate.Value = Alarm.Date;
+				checkBoxUseDate.Checked = true;
+
+			}
+			dtpTime.Value = Alarm.Time;
+			//clbWeekDays.SelectedIndices = Alarm
+			Alarm.Days.Extract(clbWeekDays);
+			labelFilename.Text = Alarm.Filename;
+		}
 		private void clbWeekDays_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			Console.WriteLine("clbWeekDays_SelectedIndexChanged");
